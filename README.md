@@ -426,3 +426,339 @@ Switch(config)#interface gigabitEthernet 0/2
 Switch(config-if)#switchport mode access
 Switch(config-if)#switchport access vlan 80
 Switch#write
+
+
+
+
+
+
+# Configuración DHCP
+## R1
+
+User Access Verification
+
+Password: 
+Password: 
+Password: 
+
+R1>enable
+Password: 
+Password: 
+R1#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#ip dhcp pool R1DHCP
+R1(dhcp-config)#network 172.16.20.0 255.255.255.0
+R1(dhcp-config)#default-router 172.16.20.254
+R1(dhcp-config)#dns-server 172.16.10.1
+R1(dhcp-config)#exit
+R1(config)#exit
+R1#
+%SYS-5-CONFIG_I: Configured from console by console
+write
+Building configuration...
+
+
+
+
+
+
+
+User Access Verification
+
+Password: 
+
+R1>enable
+Password: 
+Password: 
+R1#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#router ospf 10
+R1(config-router)#router-id 1.1.1.1
+R1(config-router)#log-adjacency-changes
+R1(config-router)#network 10.1.1.0 0.0.0.3 area 0
+R1(config-router)#network 10.1.1.4 0.0.0.3 area 0
+R1(config-router)#network 172.16.10.0 0.0.0.255 area 0
+R1(config-router)#network 172.16.20.0 0.0.0.255 area 0
+R1(config-router)#passive-interface gigabitEthernet 0/0/0.10
+R1(config-router)#passive-interface gigabitEthernet 0/0/0.20
+R1(config-router)#exit
+R1(config)#ipv6 router ospf 10
+R1(config-rtr)#router-id 1.1.1.1
+R1(config-rtr)#log-adjacency-changes
+R1(config-rtr)#exit
+R1(config)#interface serial 0/1/0
+R1(config-if)#ipv6 ospf 10 area 0
+R1(config-if)#exit
+R1(config)#interface serial 0/1/1
+R1(config-if)#ipv6 ospf 10 area 0
+R1(config-if)#exit
+R1(config)#interface gigabitEthernet 0/0/0.10
+R1(config-subif)#ipv6 ospf 10 area 0
+R1(config-subif)#exit
+R1(config)#interface gigabitEthernet 0/0/0.20
+R1(config-subif)#ipv6 ospf 10 area 0
+R1(config-subif)#exit
+R1(config)#exit
+R1#
+%SYS-5-CONFIG_I: Configured from console by console
+write
+Building configuration...
+[OK]
+R1#
+
+
+
+
+
+
+User Access Verification
+
+Password: 
+
+R2>enable
+Password: 
+R2#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#router ospf 10
+R2(config-router)#router-id 2.2.2.2
+R2(config-router)#log-adjacency-changes
+R2(config-router)#network 10.1.1.4 0.0.0.3 area 0
+R2(config-router)#network 10.1.1.8 0.0.0.3 area 0
+00:28:39: %OSPF-5-ADJCHG: Process 10, Nbr 1.1.1.1 on Serial0/2/1 from LOADING to FULL, Loading Done
+
+R2(config-router)#network 10.1.1.12 0.0.0.3 area 0
+R2(config-router)#network 10.1.1.16 0.0.0.3 area 0
+R2(config-router)#network 10.1.1.20 0.0.0.3 area 0
+R2(config-router)#exit
+R2(config)#ipv6 router ospf 10
+R2(config-rtr)#router-id 2.2.2.2
+R2(config-rtr)#log-adjacency-changes 
+R2(config-rtr)#exit
+R2(config)#interface serial 0/1/0
+R2(config-if)#ipv6 ospf 10 area 0
+R2(config-if)#exit
+R2(config)#interface serial 0/1/1
+R2(config-if)#ipv6 ospf 10 area 0
+R2(config-if)#exit
+R2(config)#interface serial 0/2/1
+R2(config-if)#ipv6 ospf 10 area 0
+R2(config-if)#exit
+R2(config)#
+00:29:55: %OSPFv3-5-ADJCHG: Process 10, Nbr 1.1.1.1 on Serial0/2/1 from LOADING to FULL, Loading Done
+interface gigabitEthernet 0/0/0
+R2(config-if)#ipv6 ospf 10 area 0
+R2(config-if)#exit
+R2(config)#interface gigabitEthernet 0/0/1
+R2(config-if)#ipv6 ospf 10 area 0
+R2(config-if)#exit
+R2(config)#exit
+R2#
+%SYS-5-CONFIG_I: Configured from console by console
+write
+Building configuration...
+[OK]
+R2#
+
+
+
+
+R3>enable
+Password: 
+Password: 
+R3#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R3(config)#router ospf 10
+R3(config-router)#router-id 3.3.3.3
+R3(config-router)#log-adjacency-changes
+R3(config-router)#network 10.1.1.12 0.0.0.3 area 0
+R3(config-router)#network 10.1.1.24 0.0.0.3 area 0
+R3(config-router)#
+00:31:15: %OSPF-5-ADJCHG: Process 10, Nbr 2.2.2.2 on Serial0/1/1 from LOADING to FULL, Loading Done
+network 172.16.70.0 0.0.0.255 area 0
+R3(config-router)#network 172.16.80.0 0.0.0.255 area 0
+R3(config-router)#passive-interface gigabitEthernet 0/0/0.70
+R3(config-router)#passive-interface gigabitEthernet 0/0/0.80
+R3(config-router)#exit
+R3(config)#ipv6 router ospf 10
+R3(config-rtr)#router-id 3.3.3.3
+R3(config-rtr)#log-adjacency-changes 
+R3(config-rtr)#exit
+R3(config)#interface serial 0/1/1
+R3(config-if)#ipv6 ospf 10 area 0
+R3(config-if)#exit
+R3(config)#
+00:32:08: %OSPFv3-5-ADJCHG: Process 10, Nbr 2.2.2.2 on Serial0/1/1 from LOADING to FULL, Loading Done
+interface gigabitEthernet 0/0/0.70
+R3(config-subif)#ipv6 ospf 10 area 0
+R3(config-subif)#exit
+R3(config)#interface gigabitEthernet 0/0/0.80
+R3(config-subif)#ipv6 ospf 10 area 0
+R3(config-subif)#exit
+R3(config)#interface gigabitEthernet 0/0/1
+R3(config-if)#ipv6 ospf 10 area 0
+R3(config-if)#exit
+R3(config)#exit
+R3#
+%SYS-5-CONFIG_I: Configured from console by console
+write
+Building configuration...
+[OK]
+
+
+
+
+User Access Verification
+
+Password: 
+
+R4>enable
+Password: 
+Password: 
+R4#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R4(config)#router ospf 10
+R4(config-router)#router-id 4.4.4.4
+R4(config-router)#log-adjacency-changes
+R4(config-router)#network 10.1.1.0 0.0.0.3 area 0
+R4(config-router)#
+00:40:37: %OSPF-5-ADJCHG: Process 10, Nbr 1.1.1.1 on Serial0/1/0 from LOADING to FULL, Loading Done
+network 10.1.1.8 0.0.0.3 area 0
+R4(config-router)#
+00:40:40: %OSPF-5-ADJCHG: Process 10, Nbr 2.2.2.2 on Serial0/2/0 from LOADING to FULL, Loading Done
+network 11.1.1.0 0.0.0.3 area 0
+R4(config-router)#default-information originate
+R4(config-router)#exit
+R4(config)#ipv6 router ospf 10
+R4(config-rtr)#router-id 4.4.4.4
+R4(config-rtr)#log-adjacency-changes
+R4(config-rtr)#default-information originate
+R4(config-rtr)#redistribute static
+R4(config-rtr)#exit
+R4(config)#interface serial 0/1/0
+R4(config-if)#ipv6 ospf 10 area 0
+R4(config-if)#exit
+R4(config)#interface serial 0/1/1
+R4(config-if)#
+00:41:40: %OSPFv3-5-ADJCHG: Process 10, Nbr 1.1.1.1 on Serial0/1/0 from LOADING to FULL, Loading Done
+ipv6 ospf 10 area 0
+R4(config-if)#exit
+R4(config)#interface serial 0/2/0
+R4(config-if)#ipv6 ospf 10 area 0
+R4(config-if)#exit
+R4(config)#exit
+R4#
+%SYS-5-CONFIG_I: Configured from console by console
+write
+Building configuration...
+[OK]
+R4#
+00:42:05: %OSPFv3-5-ADJCHG: Process 10, Nbr 2.2.2.2 on Serial0/2/0 from LOADING to FULL, Loading Done
+
+
+
+
+
+
+SW2>enable
+Password: 
+SW2#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+SW2(config)#router ospf 10
+SW2(config-router)#router-id 5.5.5.5
+SW2(config-router)#log-adjacency-changes
+SW2(config-router)#network 10.1.1.16 0.0.0.3 area 0
+SW2(config-router)#network 10.1.1.24 0.0.0.3 area 0
+SW2(config-router)#network 172.16.30.0 0.0.0.255 area 0
+00:43:36: %OSPF-5-ADJCHG: Process 10, Nbr 2.2.2.2 on GigabitEthernet1/0/23 from LOADING to FULL, Loading Done
+
+SW2(config-router)#
+00:43:39: %OSPF-5-ADJCHG: Process 10, Nbr 3.3.3.3 on GigabitEthernet1/0/24 from LOADING to FULL, Loading Done
+network 172.16.40.0 0.0.0.255 area 0
+SW2(config-router)#passive-interface vlan30
+SW2(config-router)#passive-interface vlan40
+SW2(config-router)#exit
+SW2(config)#ipv6 router ospf 10
+SW2(config-rtr)#router-id 5.5.5.5
+SW2(config-rtr)#log-adjacency-changes 
+SW2(config-rtr)#exit
+SW2(config)#interface gigabitEthernet1/0/23
+SW2(config-if)#ipv6 ospf 10 area 0
+SW2(config-if)#eit
+                ^
+% Invalid input detected at '^' marker.
+	
+SW2(config-if)#exit
+SW2(config)#interface gigabitEthernet1/0/24
+SW2(config-if)#ipv6 ospf 10 area 0
+SW2(config-if)#}
+00:44:35: %OSPFv3-5-ADJCHG: Process 10, Nbr 2.2.2.2 on GigabitEthernet1/0/23 from LOADING to FULL, Loading Done
+exit
+               ^
+% Invalid input detected at '^' marker.
+	
+SW2(config-if)#
+00:44:45: %OSPFv3-5-ADJCHG: Process 10, Nbr 3.3.3.3 on GigabitEthernet1/0/24 from LOADING to FULL, Loading Done
+exit
+SW2(config)#interface vlan30
+SW2(config-if)#ipv6 ospf 10 area 0
+SW2(config-if)#exit
+SW2(config)#interface vlan40
+SW2(config-if)#ipv6 ospf 10 area 0
+SW2(config-if)#exit
+SW2(config)#exit
+SW2#
+%SYS-5-CONFIG_I: Configured from console by console
+write
+Building configuration...
+Compressed configuration from 7383 bytes to 3601 bytes[OK]
+[OK]
+SW2#
+
+
+
+
+
+
+
+User Access Verification
+
+Password: 
+
+SW3>enable
+Password: 
+Password: 
+SW3#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+SW3(config)#router ospf 10
+SW3(config-router)#router-id 6.6.6.6
+SW3(config-router)#log-adjacency-changes
+SW3(config-router)#network 10.1.1.20 0.0.0.3 area 0
+SW3(config-router)#network 172.16.50.0 0.0.0.255 area 0
+SW3(config-router)#network 172.16.60.0 0.0.0.255 area 0
+SW3(config-router)#
+00:46:42: %OSPF-5-ADJCHG: Process 10, Nbr 2.2.2.2 on GigabitEthernet1/0/24 from LOADING to FULL, Loading Done
+passive-interface vlan50
+SW3(config-router)#passive-interface vlan60
+SW3(config-router)#exit
+SW3(config)#ipv6 router ospf 10
+SW3(config-rtr)#router-id 6.6.6.6
+SW3(config-rtr)#log-adjacency-changes
+SW3(config-rtr)#exit
+SW3(config)#interface gigabitEthernet1/0/24
+SW3(config-if)#ipv6 ospf 10 area 0
+SW3(config-if)#exit
+SW3(config)#interface vlan50
+SW3(config-if)#ipv6 ospf 10 area 0
+00:47:33: %OSPFv3-5-ADJCHG: Process 10, Nbr 2.2.2.2 on GigabitEthernet1/0/24 from LOADING to FULL, Loading Done
+
+SW3(config-if)#exit
+SW3(config)#interface vlan60
+SW3(config-if)#ipv6 ospf 10 area 0
+SW3(config-if)#exit
+SW3(config)#exit
+SW3#
+%SYS-5-CONFIG_I: Configured from console by console
+write
+Building configuration...
+Compressed configuration from 7383 bytes to 3601 bytes[OK]
+[OK]
